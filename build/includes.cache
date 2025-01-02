@@ -1,0 +1,52 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/roygerstner/.arduino15/packages/OpenCM904/hardware/OpenCM904/1.5.1/cores/arduino"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/roygerstner/.arduino15/packages/OpenCM904/hardware/OpenCM904/1.5.1/variants/OpenCM904"
+  },
+  {
+    "Sourcefile": "/home/roygerstner/git_repos/ArduinoTestProject_XL320/build/sketch/ArduinoTestProject_XL320.ino.cpp",
+    "Include": "actuator.h",
+    "Includepath": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src"
+  },
+  {
+    "Sourcefile": "/home/roygerstner/git_repos/ArduinoTestProject_XL320/build/sketch/ArduinoTestProject_XL320.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src/Dynamixel2Arduino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src/actuator.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src/dxl_c/protocol.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src/utility/master.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src/utility/port_handler.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/roygerstner/Arduino/libraries/Dynamixel2Arduino/src/utility/slave.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

@@ -1,0 +1,8 @@
+#line 1 "/home/roygerstner/git_repos/ArduinoTestProject_XL320/.vscode/arduino.json"
+{
+    "sketch": "ArduinoTestProject_XL320.ino",
+    "output": "build",
+    "configuration": "upload_method=UploadMethod",
+    "board": "OpenCM904:OpenCM904:OpenCM904",
+    "port": "/dev/ttyACM0"
+}

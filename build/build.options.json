@@ -1,0 +1,11 @@
+{
+  "additionalFiles": "../../..,../../..,../..",
+  "builtInToolsFolders": "",
+  "compiler.optimization_flags": "",
+  "customBuildProperties": "",
+  "fqbn": "OpenCM904:OpenCM904:OpenCM904:upload_method=UploadMethod",
+  "hardwareFolders": "/home/roygerstner/.arduino15/packages",
+  "otherLibrariesFolders": "/home/roygerstner/Arduino/libraries",
+  "runtime.ide.version": "10607",
+  "sketchLocation": "/home/roygerstner/git_repos/ArduinoTestProject_XL320"
+}

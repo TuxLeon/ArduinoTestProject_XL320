@@ -1,0 +1,7 @@
+{
+    "sketch": "ArduinoTestProject_XL320.ino",
+    "output": "build",
+    "configuration": "upload_method=UploadMethod",
+    "board": "OpenCM904:OpenCM904:OpenCM904",
+    "port": "/dev/ttyACM0"
+}
