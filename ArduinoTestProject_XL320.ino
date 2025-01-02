@@ -77,15 +77,17 @@ void setup() {
     
     
     // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-    int8_t protocol = 2;
-    dxl.setPortProtocolVersion((float)protocol);
-    DEBUG_SERIAL.print("SCAN PROTOCOL (Roy) ");
+    float32 protocol = 2.0;
+    dxl.setPortProtocolVersion(protocol);
+    DEBUG_SERIAL.print("SCAN PROTOCOL :");
     DEBUG_SERIAL.println(protocol);
     
       // Set Port baudrate.
       DEBUG_SERIAL.print("SCAN BAUDRATE ");
       DEBUG_SERIAL.println(baud);
       dxl.begin(baud);
+      dxl.scan();
+  
       for(int id = 0; id < 10; id++) {
         //iterate until all ID in each buadrate is scanned.
         if(dxl.ping(id)) {
@@ -96,14 +98,22 @@ void setup() {
           found_dynamixel++;
 
           // Turn off torque when configuring items in EEPROM area
-          dxl.torqueOff(id);
-          int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
-          dxl.torqueOn(id);
-          DEBUG_SERIAL.print("OperationMode ");
-          DEBUG_SERIAL.println(mode_result);
+          // dxl.torqueOff(id);
+          dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
+          // int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
+          if(dxl.writeControlTableItem(CONTROL_MODE, ID, 1){
+            delay(200);
+            DEBUG_SERIAL.println(dxl.readControlTableItem(CONTROL_MODE, id));
+          }
+          else{
+            DEBUG_SERIAL.print("CONTROL_MODE ");
+            DEBUG_SERIAL.print(id);  
+            DEBUG_SERIAL.println(" failed!");
+          }
+          //dxl.torqueOn(id);
+          dxl.writeControlTableItem(TORQUE_ENABLE, DXL_ID, 1);
           dxl.ledOn(id);
           
-
           // dxl.writeControlTableItem(PROFILE_VELOCITY, id, 30);
         }
         else{
