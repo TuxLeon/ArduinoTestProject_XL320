@@ -77,7 +77,7 @@ void setup() {
     
     
     // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-    float protocol = 2.0;
+    float32 protocol = 2.0;
     dxl.setPortProtocolVersion(protocol);
     DEBUG_SERIAL.print("SCAN PROTOCOL :");
     DEBUG_SERIAL.println(protocol);
@@ -100,8 +100,8 @@ void setup() {
           // Turn off torque when configuring items in EEPROM area
           // dxl.torqueOff(id);
           dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
-          
-          if(dxl.setOperatingMode(id, OP_VELOCITY)){
+          // int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
+          if(dxl.writeControlTableItem(CONTROL_MODE, ID, 1){
             delay(200);
             DEBUG_SERIAL.println(dxl.readControlTableItem(CONTROL_MODE, id));
           }
@@ -111,7 +111,7 @@ void setup() {
             DEBUG_SERIAL.println(" failed!");
           }
           //dxl.torqueOn(id);
-          dxl.writeControlTableItem(TORQUE_ENABLE, id, 1);
+          dxl.writeControlTableItem(TORQUE_ENABLE, DXL_ID, 1);
           dxl.ledOn(id);
           
           // dxl.writeControlTableItem(PROFILE_VELOCITY, id, 30);
