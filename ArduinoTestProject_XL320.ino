@@ -77,7 +77,7 @@ void setup() {
     
     
     // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-    float32 protocol = 2.0;
+    float protocol = 2.0;
     dxl.setPortProtocolVersion(protocol);
     DEBUG_SERIAL.print("SCAN PROTOCOL :");
     DEBUG_SERIAL.println(protocol);
@@ -100,8 +100,8 @@ void setup() {
           // Turn off torque when configuring items in EEPROM area
           // dxl.torqueOff(id);
           dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
-          // int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
-          if(dxl.writeControlTableItem(CONTROL_MODE, ID, 1){
+          
+          if(dxl.setOperatingMode(id, OP_VELOCITY)){
             delay(200);
             DEBUG_SERIAL.println(dxl.readControlTableItem(CONTROL_MODE, id));
           }
@@ -111,7 +111,7 @@ void setup() {
             DEBUG_SERIAL.println(" failed!");
           }
           //dxl.torqueOn(id);
-          dxl.writeControlTableItem(TORQUE_ENABLE, DXL_ID, 1);
+          dxl.writeControlTableItem(TORQUE_ENABLE, id, 1);
           dxl.ledOn(id);
           
           // dxl.writeControlTableItem(PROFILE_VELOCITY, id, 30);
@@ -172,17 +172,33 @@ void loop() {
   
   // Please refer to e-Manual(http://emanual.robotis.com) for available range of value. 
   // Set Goal Velocity using RAW unit
-  dxl.setGoalVelocity(2, rpm, UNIT_PERCENT);
-  dxl.setGoalVelocity(3, -rpm, UNIT_PERCENT);
+    if(dxl.setGoalVelocity(3, rpm, UNIT_RAW)){
+    DEBUG_SERIAL.print("Speed2 : ");
+    DEBUG_SERIAL.println(rpm);
+  }
+  else{
+    DEBUG_SERIAL.println("Speed2 FAILED!");
+  }
+  
+  if(dxl.setGoalVelocity(2, rpm, UNIT_RAW)){
+    DEBUG_SERIAL.print("Speed1 : ");
+    DEBUG_SERIAL.println(rpm);
+  }
+  else{
+    DEBUG_SERIAL.println("Speed1 FAILED!");
+  }
 
-  rpm += 1.0;
-  if(rpm > 100){
+
+
+
+  rpm += 10.0;
+  if(rpm > 2048){
     rpm = 0.0;
   }
 
   DEBUG_SERIAL.print("Speed : ");
   DEBUG_SERIAL.println(rpm);
-  delay(1000);
+  delay(50);
 
  
 }
