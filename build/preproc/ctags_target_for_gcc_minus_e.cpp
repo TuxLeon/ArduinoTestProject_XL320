@@ -58,15 +58,21 @@ void setup() {
 
 
     // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-    int8_t protocol = 2;
-    dxl.setPortProtocolVersion((float)protocol);
-    Serial.print("SCAN PROTOCOL (Roy) ");
+<<<<<<< HEAD
+    float protocol = 2.0;
+=======
+    float32 protocol = 2.0;
+>>>>>>> 705dccd (Update auf writeControlTableItem() Methode)
+    dxl.setPortProtocolVersion(protocol);
+    Serial.print("SCAN PROTOCOL :");
     Serial.println(protocol);
 
       // Set Port baudrate.
       Serial.print("SCAN BAUDRATE ");
       Serial.println(baud);
       dxl.begin(baud);
+      dxl.scan();
+
       for(int id = 0; id < 10; id++) {
         //iterate until all ID in each buadrate is scanned.
         if(dxl.ping(id)) {
@@ -77,13 +83,30 @@ void setup() {
           found_dynamixel++;
 
           // Turn off torque when configuring items in EEPROM area
-          dxl.torqueOff(id);
-          int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
-          dxl.torqueOn(id);
-          Serial.print("OperationMode ");
-          Serial.println(mode_result);
-          dxl.ledOn(id);
+          // dxl.torqueOff(id);
+          dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
+<<<<<<< HEAD
 
+          if(dxl.setOperatingMode(id, OP_VELOCITY)){
+=======
+          // int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
+          if(dxl.writeControlTableItem(CONTROL_MODE, ID, 1){
+>>>>>>> 705dccd (Update auf writeControlTableItem() Methode)
+            HAL_Delay(200);
+            Serial.println(dxl.readControlTableItem(CONTROL_MODE, id));
+          }
+          else{
+            Serial.print("CONTROL_MODE ");
+            Serial.print(id);
+            Serial.println(" failed!");
+          }
+          //dxl.torqueOn(id);
+<<<<<<< HEAD
+          dxl.writeControlTableItem(TORQUE_ENABLE, id, 1);
+=======
+          dxl.writeControlTableItem(TORQUE_ENABLE, DXL_ID, 1);
+>>>>>>> 705dccd (Update auf writeControlTableItem() Methode)
+          dxl.ledOn(id);
 
           // dxl.writeControlTableItem(PROFILE_VELOCITY, id, 30);
         }
@@ -143,17 +166,33 @@ void loop() {
 
   // Please refer to e-Manual(http://emanual.robotis.com) for available range of value. 
   // Set Goal Velocity using RAW unit
-  dxl.setGoalVelocity(2, rpm, UNIT_PERCENT);
-  dxl.setGoalVelocity(3, -rpm, UNIT_PERCENT);
+    if(dxl.setGoalVelocity(3, rpm, UNIT_RAW)){
+    Serial.print("Speed2 : ");
+    Serial.println(rpm);
+  }
+  else{
+    Serial.println("Speed2 FAILED!");
+  }
 
-  rpm += 1.0;
-  if(rpm > 100){
+  if(dxl.setGoalVelocity(2, rpm, UNIT_RAW)){
+    Serial.print("Speed1 : ");
+    Serial.println(rpm);
+  }
+  else{
+    Serial.println("Speed1 FAILED!");
+  }
+
+
+
+
+  rpm += 10.0;
+  if(rpm > 2048){
     rpm = 0.0;
   }
 
   Serial.print("Speed : ");
   Serial.println(rpm);
-  HAL_Delay(1000);
+  HAL_Delay(50);
 
 
 }

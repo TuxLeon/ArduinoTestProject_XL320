@@ -68,9 +68,6 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
 //This namespace is required to use Control table item names
 using namespace ControlTableItem;
 
-#line 151 "/home/roygerstner/git_repos/ArduinoTestProject_XL320/ArduinoTestProject_XL320.ino"
-void loop();
-#line 69 "/home/roygerstner/git_repos/ArduinoTestProject_XL320/ArduinoTestProject_XL320.ino"
 void setup() {
   // put your setup code here, to run once:
   int8_t index = 0;
@@ -82,15 +79,21 @@ void setup() {
     
     
     // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-    int8_t protocol = 2;
-    dxl.setPortProtocolVersion((float)protocol);
-    DEBUG_SERIAL.print("SCAN PROTOCOL (Roy) ");
+<<<<<<< HEAD
+    float protocol = 2.0;
+=======
+    float32 protocol = 2.0;
+>>>>>>> 705dccd (Update auf writeControlTableItem() Methode)
+    dxl.setPortProtocolVersion(protocol);
+    DEBUG_SERIAL.print("SCAN PROTOCOL :");
     DEBUG_SERIAL.println(protocol);
     
       // Set Port baudrate.
       DEBUG_SERIAL.print("SCAN BAUDRATE ");
       DEBUG_SERIAL.println(baud);
       dxl.begin(baud);
+      dxl.scan();
+  
       for(int id = 0; id < 10; id++) {
         //iterate until all ID in each buadrate is scanned.
         if(dxl.ping(id)) {
@@ -101,14 +104,31 @@ void setup() {
           found_dynamixel++;
 
           // Turn off torque when configuring items in EEPROM area
-          dxl.torqueOff(id);
-          int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
-          dxl.torqueOn(id);
-          DEBUG_SERIAL.print("OperationMode ");
-          DEBUG_SERIAL.println(mode_result);
+          // dxl.torqueOff(id);
+          dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
+<<<<<<< HEAD
+          
+          if(dxl.setOperatingMode(id, OP_VELOCITY)){
+=======
+          // int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
+          if(dxl.writeControlTableItem(CONTROL_MODE, ID, 1){
+>>>>>>> 705dccd (Update auf writeControlTableItem() Methode)
+            delay(200);
+            DEBUG_SERIAL.println(dxl.readControlTableItem(CONTROL_MODE, id));
+          }
+          else{
+            DEBUG_SERIAL.print("CONTROL_MODE ");
+            DEBUG_SERIAL.print(id);  
+            DEBUG_SERIAL.println(" failed!");
+          }
+          //dxl.torqueOn(id);
+<<<<<<< HEAD
+          dxl.writeControlTableItem(TORQUE_ENABLE, id, 1);
+=======
+          dxl.writeControlTableItem(TORQUE_ENABLE, DXL_ID, 1);
+>>>>>>> 705dccd (Update auf writeControlTableItem() Methode)
           dxl.ledOn(id);
           
-
           // dxl.writeControlTableItem(PROFILE_VELOCITY, id, 30);
         }
         else{
@@ -167,17 +187,34 @@ void loop() {
   
   // Please refer to e-Manual(http://emanual.robotis.com) for available range of value. 
   // Set Goal Velocity using RAW unit
-  dxl.setGoalVelocity(2, rpm, UNIT_PERCENT);
-  dxl.setGoalVelocity(3, -rpm, UNIT_PERCENT);
+    if(dxl.setGoalVelocity(3, rpm, UNIT_RAW)){
+    DEBUG_SERIAL.print("Speed2 : ");
+    DEBUG_SERIAL.println(rpm);
+  }
+  else{
+    DEBUG_SERIAL.println("Speed2 FAILED!");
+  }
+  
+  if(dxl.setGoalVelocity(2, rpm, UNIT_RAW)){
+    DEBUG_SERIAL.print("Speed1 : ");
+    DEBUG_SERIAL.println(rpm);
+  }
+  else{
+    DEBUG_SERIAL.println("Speed1 FAILED!");
+  }
 
-  rpm += 1.0;
-  if(rpm > 100){
+
+
+
+  rpm += 10.0;
+  if(rpm > 2048){
     rpm = 0.0;
   }
 
   DEBUG_SERIAL.print("Speed : ");
   DEBUG_SERIAL.println(rpm);
-  delay(1000);
+  delay(50);
 
  
 }
+
