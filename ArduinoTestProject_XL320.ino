@@ -77,7 +77,7 @@ void setup() {
     
     
     // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-    float32 protocol = 2.0;
+    float protocol = 2.0;
     dxl.setPortProtocolVersion(protocol);
     DEBUG_SERIAL.print("SCAN PROTOCOL :");
     DEBUG_SERIAL.println(protocol);
@@ -98,20 +98,17 @@ void setup() {
           found_dynamixel++;
 
           // Turn off torque when configuring items in EEPROM area
-          // dxl.torqueOff(id);
-          dxl.writeControlTableItem(TORQUE_ENABLE, id, 0);
-          // int8_t mode_result = dxl.setOperatingMode(id, OP_VELOCITY);
-          if(dxl.writeControlTableItem(CONTROL_MODE, ID, 1){
+          if(!dxl.torqueOff(id)){
+            DEBUG_SERIAL.println("TorqueOff FAILED!");
+          };
+          delay(200);
+          if(!dxl.setOperatingMode(id, OP_VELOCITY)){
             delay(200);
-            DEBUG_SERIAL.println(dxl.readControlTableItem(CONTROL_MODE, id));
+            DEBUG_SERIAL.println("Control_Mode FAILED!");
           }
-          else{
-            DEBUG_SERIAL.print("CONTROL_MODE ");
-            DEBUG_SERIAL.print(id);  
-            DEBUG_SERIAL.println(" failed!");
-          }
-          //dxl.torqueOn(id);
-          dxl.writeControlTableItem(TORQUE_ENABLE, DXL_ID, 1);
+          if(!dxl.torqueOn(id)){
+            DEBUG_SERIAL.println("TorqueON FAILED!");
+          };
           dxl.ledOn(id);
           
           // dxl.writeControlTableItem(PROFILE_VELOCITY, id, 30);
@@ -121,6 +118,7 @@ void setup() {
           DEBUG_SERIAL.print(id);
           DEBUG_SERIAL.println(" empty");
         }
+        delay(200);
       }
   
   DEBUG_SERIAL.print("Total ");
@@ -156,12 +154,29 @@ void setup() {
   DEBUG_SERIAL.println(result2);
 }
 
+
+float_t speed = 0.0;
 float_t rpm = 0.0;
+float_t rpm_rv = 0.0;
+bool direction = 0;
+
+void calculate_rpm(float_t speed, float_t &rpm, float_t &rpm_rv){ 
+  if( speed >= 0){
+      rpm = speed/100*1023;
+      rpm_rv = rpm + 1024;
+    }
+    else{
+      rpm = (abs(speed)/100.0*1023.0) + 1024.0;
+      rpm_rv = (abs(speed)/100.0*1023.0);
+    }
+}
 
 void loop() {
   // put your main code here, to run repeatedly:
   posMot1 = dxl.getPresentVelocity(2);
+  delay(10);
   posMot2 = dxl.getPresentVelocity(3);
+  delay(10);
 
   DEBUG_SERIAL.print("Velocity:  ");
   DEBUG_SERIAL.print(posMot1);
@@ -169,10 +184,37 @@ void loop() {
   DEBUG_SERIAL.println(posMot2);
 
   // put your main code here, to run repeatedly:
+
+  // sweep forward and backward
+  if(direction == 0){
+    speed = speed + 1.0;
+    
+    if(speed >= 100.0){
+      speed = 100.0;
+      direction = 1;
+    }
+  }
+  else{
+    // direction = 1
+    speed = speed - 1.0;
+
+    if(speed <= -100.0){
+      speed = -100.0;
+      direction = 0;
+    }
+  }
+
+  calculate_rpm(speed, rpm, rpm_rv);
+
+  DEBUG_SERIAL.print("rpm : ");
+  DEBUG_SERIAL.println(rpm);
+  DEBUG_SERIAL.print("rpm_rv : ");
+  DEBUG_SERIAL.println(rpm_rv);
   
   // Please refer to e-Manual(http://emanual.robotis.com) for available range of value. 
   // Set Goal Velocity using RAW unit
-    if(dxl.setGoalVelocity(3, rpm, UNIT_RAW)){
+
+  if(dxl.setGoalVelocity(3, rpm, UNIT_RAW)){
     DEBUG_SERIAL.print("Speed2 : ");
     DEBUG_SERIAL.println(rpm);
   }
@@ -180,25 +222,17 @@ void loop() {
     DEBUG_SERIAL.println("Speed2 FAILED!");
   }
   
-  if(dxl.setGoalVelocity(2, rpm, UNIT_RAW)){
+  if(dxl.setGoalVelocity(2, rpm_rv, UNIT_RAW)){
     DEBUG_SERIAL.print("Speed1 : ");
-    DEBUG_SERIAL.println(rpm);
+    DEBUG_SERIAL.println(rpm_rv);
   }
   else{
     DEBUG_SERIAL.println("Speed1 FAILED!");
   }
 
 
-
-
-  rpm += 10.0;
-  if(rpm > 2048){
-    rpm = 0.0;
-  }
-
-  DEBUG_SERIAL.print("Speed : ");
-  DEBUG_SERIAL.println(rpm);
-  delay(50);
+  
+  delay(100);
 
  
 }

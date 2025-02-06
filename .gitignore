@@ -34,5 +34,5 @@
 *.elf
 *.map
 
-build/preproc/ctags_target_for_gcc_minus_e.cpp
-build/sketch/ArduinoTestProject_XL320.ino.cpp
+build/*
+build/*
